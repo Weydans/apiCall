@@ -22,7 +22,7 @@ class ApiCall
      * @param string $url    Endpoint que irá receber a requisição
      * @param array  $header Cabeçalhos dinamicos enviados para o end point
      */
-    public static function apiRequest(string $url, array $header = null)
+    public static function apiRequest(string $url, array $header = null) : ApiCall
     {
         self::$curl = curl_init($url);
 
@@ -41,8 +41,8 @@ class ApiCall
     /**
      * exec()
      * 
-     * Executa requisiação, recupera os dados retornados e o codigo de retorno
-     * @return array $response Dados da requisição
+     * Executa requisiação, recupera os dados retornados e o código de retorno
+     * @return array $response Dados da resposta da requisição
      */
     public function exec() : array
     {
@@ -58,9 +58,12 @@ class ApiCall
     /**
      * get()
      * 
-     * 
+     * Realiza parametrização requisições do tipo GET
+     * @param  bool $returnTransfer Configura retorno como string ao invés de printar na tela
+     * @param  bool $sslVerify      Verifica certificado do par 
+     * @return ApiCall              Instância da p´ropria classe
      */
-    public function get(bool $returnTransfer = true, bool $sslVerify = false)
+    public function get(bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {   
         curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, $returnTransfer);
         curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
@@ -72,10 +75,13 @@ class ApiCall
     /**
      * post()
      * 
-     * 
+     * Realiza parametrização requisições do tipo POST
+     * @param  array $data     Dados enviados na requisição
+     * @param  bool $sslVerify Verifica certificado do par 
+     * @return ApiCall         Instância da p´ropria classe
      */
-    private function post(array $data, bool $sslVerify = false)
-    {
+    private function post(array $data, bool $sslVerify = false) : ApiCall
+    { 
         curl_setopt(self::$curl, CURLOPT_POST,           TRUE);
         curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
         curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
@@ -87,9 +93,12 @@ class ApiCall
     /**
      * put()
      * 
-     * 
+     * Realiza parametrização requisições do tipo PUT
+     * @param  array $data     Dados enviados na requisição
+     * @param  bool $sslVerify Verifica certificado do par 
+     * @return ApiCall         Instância da p´ropria classe
      */
-    private function put(array $data, bool $sslVerify = false)
+    private function put(array $data, bool $sslVerify = false) : ApiCall
     {
         curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'PUT');        
         curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
@@ -102,9 +111,12 @@ class ApiCall
     /**
      * delete()
      * 
-     * 
+     * Realiza parametrização requisições do tipo DELETE
+     * @param  array $data     Dados enviados na requisição
+     * @param  bool $sslVerify Verifica certificado do par 
+     * @return ApiCall         Instância da p´ropria classe
      */
-    private function delete(array $data, bool $sslVerify = false)
+    private function delete(array $data, bool $sslVerify = false) : ApiCall
     {
         curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'DELETE');   
         curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
