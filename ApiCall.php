@@ -12,8 +12,26 @@ class ApiCall
 {
     private static $curl;
     private static $instance = null;
+    
 
     private function __construct(){}
+
+
+    /**
+     * getInstance()
+     *
+     * Retorna instância única seguindo o padrão Singleton
+     * @return ApiCall instância da própria classe
+     */   
+    public static function getInstance() : ApiCall
+    {
+        if (empty(self::$instance)) {
+            self::$instance = new ApiCall();
+        }
+
+        return self::$instance;
+    }
+
 
     /**
      * apiRequest()
@@ -30,11 +48,7 @@ class ApiCall
             curl_setopt(self::$curl, CURLOPT_HTTPHEADER, $header);
         }
 
-        if (empty(self::$instance)) {
-            self::$instance = new ApiCall();
-        }
-
-        return self::$instance;
+        return self::getInstance();
     }
 
 
