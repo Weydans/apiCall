@@ -114,7 +114,7 @@ class ApiCall
      * @param  bool $sslVerify Verifica certificado do par 
      * @return ApiCall         Instância da própria classe
      */
-    public function put(array $data, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
+    public function put(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
         $data = self::isJson($data, $json);
 
@@ -134,7 +134,7 @@ class ApiCall
      * @param  bool $sslVerify Verifica certificado do par 
      * @return ApiCall         Instância da própria classe
      */
-    public function delete(array $data, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
+    public function delete(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
         $data = self::isJson($data, $json);
 
