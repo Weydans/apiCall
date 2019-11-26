@@ -10,11 +10,27 @@
 
 class ApiCall
 {
+    /**
+     * Recurso curl base para uso da biblioteca
+     */
     private static $curl;
+
+    /**
+     * Instância singleton da propria classe
+     */
     private static $instance = null;
 
 
+    /**
+     * Impede criação de objetos fora da classe
+     */
     private function __construct(){}
+
+
+    /**
+     * Impede criação de clones fora da classe
+     */
+    private function __clone(){}
 
 
     /**
@@ -37,8 +53,9 @@ class ApiCall
      * apiRequest()
      * 
      * Inicializa requisição 
-     * @param string $url    Endpoint que irá receber a requisição
-     * @param array  $header Cabeçalhos dinamicos enviados para o end point
+     * @param  string $url    Endpoint que irá receber a requisição
+     * @param  array  $header Cabeçalhos dinamicos enviados para o end point
+     * @return ApiCall        Instância da própria classe
      */
     public static function apiRequest(string $url, array $header = null) : ApiCall
     {
@@ -89,10 +106,11 @@ class ApiCall
      * post()
      * 
      * Realiza parametrização requisições do tipo POST
-     * @param  array   $data      Dados enviados na requisição
-     * @param  bool    $json      Formato de envio dos dados como JSON
-     * @param  bool    $sslVerify Verifica certificado do par 
-     * @return ApiCall Instância da própria classe
+     * @param  array $data           Dados enviados na requisição
+     * @param  bool  $json           Formato de envio dos dados como JSON
+     * @param  bool  $returnTransfer Configura retorno como string ao invés de printar na tela
+     * @param  bool  $sslVerify      Verifica certificado do par 
+     * @return ApiCall               Instância da própria classe
      */
     public function post(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     { 
@@ -110,9 +128,11 @@ class ApiCall
      * put()
      * 
      * Realiza parametrização requisições do tipo PUT
-     * @param  array $data     Dados enviados na requisição
-     * @param  bool $sslVerify Verifica certificado do par 
-     * @return ApiCall         Instância da própria classe
+     * @param  array $data           Dados enviados na requisição
+     * @param  bool  $json           Formato de envio dos dados como JSON
+     * @param  bool  $returnTransfer Configura retorno como string ao invés de printar na tela
+     * @param  bool  $sslVerify      Verifica certificado do par 
+     * @return ApiCall               Instância da própria classe
      */
     public function put(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
@@ -130,9 +150,11 @@ class ApiCall
      * delete()
      * 
      * Realiza parametrização requisições do tipo DELETE
-     * @param  array $data     Dados enviados na requisição
-     * @param  bool $sslVerify Verifica certificado do par 
-     * @return ApiCall         Instância da própria classe
+     * @param  array $data           Dados enviados na requisição
+     * @param  bool  $json           Formato de envio dos dados como JSON
+     * @param  bool  $returnTransfer Configura retorno como string ao invés de printar na tela
+     * @param  bool  $sslVerify      Verifica certificado do par 
+     * @return ApiCall               Instância da própria classe
      */
     public function delete(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
