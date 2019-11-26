@@ -12,7 +12,7 @@ class ApiCall
 {
     private static $curl;
     private static $instance = null;
-    
+
 
     private function __construct(){}
 
@@ -75,12 +75,11 @@ class ApiCall
      * Realiza parametrização requisições do tipo GET
      * @param  bool $returnTransfer Configura retorno como string ao invés de printar na tela
      * @param  bool $sslVerify      Verifica certificado do par 
-     * @return ApiCall              Instância da p´ropria classe
+     * @return ApiCall              Instância da própria classe
      */
     public function get(bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {   
-        curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, $returnTransfer);
-        curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
+        self::commonSetOpt(false, $returnTransfer, $sslVerify);
 
         return self::$instance;
     }
@@ -90,15 +89,18 @@ class ApiCall
      * post()
      * 
      * Realiza parametrização requisições do tipo POST
-     * @param  array $data     Dados enviados na requisição
-     * @param  bool $sslVerify Verifica certificado do par 
-     * @return ApiCall         Instância da p´ropria classe
+     * @param  array   $data      Dados enviados na requisição
+     * @param  bool    $json      Formato de envio dos dados como JSON
+     * @param  bool    $sslVerify Verifica certificado do par 
+     * @return ApiCall Instância da própria classe
      */
-    private function post(array $data, bool $sslVerify = false) : ApiCall
+    public function post(array $data, bool $json = true, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     { 
-        curl_setopt(self::$curl, CURLOPT_POST,           TRUE);
-        curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
-        curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
+        $data = self::isJson($data, $json);
+
+        curl_setopt(self::$curl, CURLOPT_POST, TRUE);
+
+        self::commonSetOpt($data, $returnTransfer, $sslVerify);
 
         return self::$instance;
     }
@@ -110,13 +112,15 @@ class ApiCall
      * Realiza parametrização requisições do tipo PUT
      * @param  array $data     Dados enviados na requisição
      * @param  bool $sslVerify Verifica certificado do par 
-     * @return ApiCall         Instância da p´ropria classe
+     * @return ApiCall         Instância da própria classe
      */
-    private function put(array $data, bool $sslVerify = false) : ApiCall
+    public function put(array $data, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
-        curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'PUT');        
-        curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
-        curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
+        $data = self::isJson($data, $json);
+
+        curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+
+        self::commonSetOpt($data, $returnTransfer, $sslVerify);
 
         return self::$instance;
     }
@@ -128,15 +132,54 @@ class ApiCall
      * Realiza parametrização requisições do tipo DELETE
      * @param  array $data     Dados enviados na requisição
      * @param  bool $sslVerify Verifica certificado do par 
-     * @return ApiCall         Instância da p´ropria classe
+     * @return ApiCall         Instância da própria classe
      */
-    private function delete(array $data, bool $sslVerify = false) : ApiCall
+    public function delete(array $data, bool $returnTransfer = true, bool $sslVerify = false) : ApiCall
     {
-        curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'DELETE');   
-        curl_setopt(self::$curl, CURLOPT_POSTFIELDS,     $data);
-        curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
+        $data = self::isJson($data, $json);
+
+        curl_setopt(self::$curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); 
+
+        self::commonSetOpt($data, $returnTransfer, $sslVerify);
 
         return self::$instance;
+    }
+
+
+    /**
+     * isJson()
+     *
+     * Converte um array de dados para formato JSON
+     * @param  array  $data Dados da requisição
+     * @param  bool   $json Tipo de dado JSON
+     * @return Dados no formato JSON caso parâmetro $json igual a true
+     */
+    private static function isJson(array $data, bool $json)
+    {
+        if ($json) {
+            return json_encode($data);
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * commonSetOpt()
+     *
+     * Realiza configuração de opções da biblioteca CURL
+     * @param mixed $data           Dados de envio no formato correto ( array ou JSON )
+     * @param bool  $returnTransfer Configura retorno como string ao invés de printar na tela
+     * @param bool  $sslVerify      Verifica certificado do par
+     */
+    private static function commonSetOpt($data, bool $returnTransfer, bool $sslVerify)
+    {        
+        if ($data) {
+            curl_setopt(self::$curl, CURLOPT_POSTFIELDS, $data);
+        }
+
+        curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, $sslVerify);
+        curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, $returnTransfer);
     }
 
 }
